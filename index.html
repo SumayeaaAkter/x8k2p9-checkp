@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Secret Wish</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #667eea, #764ba2);
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 120px;
+      color: white;
+    }
+
+    input, button {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 10px;
+    }
+
+    #wish {
+      display: none;
+      font-size: 36px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔐 Enter Password</h2>
+  <input type="password" id="password" placeholder="Enter password">
+  <br>
+  <button onclick="checkPassword()">Unlock</button>
+
+  <div id="wish">
+    🎉 Happy Birthday! Wishing you lots of happiness and success! 🎉
+  </div>
+
+  <script>
+    function checkPassword() {
+      const correctPassword = "hi baby";   // 🔑 CHANGE THIS
+      const userPassword = document.getElementById("password").value;
+
+      if (userPassword === correctPassword) {
+        document.getElementById("wish").style.display = "block";
+      } else {
+        alert("Wrong password 😅");
+      }
+    }
+  </script>
+
+</body>
+</html>
