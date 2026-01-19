@@ -1,54 +1,689 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Secret Wish</title>
+  <title>Secret Galaxy 🌌</title>
+
   <style>
     body {
-      background: linear-gradient(to right, #667eea, #764ba2);
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 120px;
+      margin: 0;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(130,220,255,0.35), transparent 45%),
+        radial-gradient(circle at 70% 60%, rgba(220,140,255,0.35), transparent 50%),
+        linear-gradient(180deg, #050015, #000000);
+      overflow: hidden;
+      font-family: "Segoe UI", sans-serif;
       color: white;
     }
 
-    input, button {
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: none;
-      margin-top: 10px;
+    /* Lock Screen */
+    #lockScreen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
     }
 
-    #wish {
+    #lockScreen h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px rgba(255,255,255,0.5);
+    }
+
+    input, button {
+      padding: 14px 24px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 12px;
+    }
+
+    input {
+      width: 250px;
+      text-align: center;
+    }
+
+    button {
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    /* Sky */
+    #sky {
       display: none;
-      font-size: 36px;
-      margin-top: 40px;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Milky Way Band */
+    .milkyway {
+      position: absolute;
+      width: 140%;
+      height: 280px;
+      top: 42%;
+      left: -20%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(220,220,255,0.2),
+        rgba(200,140,255,0.4),
+        rgba(220,220,255,0.2),
+        transparent
+      );
+      filter: blur(55px);
+      transform: rotate(-12deg);
+      opacity: 0.9;
+    }
+
+    /* Glitter Dust */
+    .dust {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: dustFloat linear infinite;
+    }
+
+    @keyframes dustFloat {
+      from { transform: translateY(0); opacity: 0.3; }
+      to { transform: translateY(-120vh); opacity: 1; }
+    }
+
+    /* Galaxy Moon */
+    .moon {
+      position: absolute;
+      left: 50%;
+      top: 16%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, #fff5f5, #ffe6f0 25%, #ffd4e8 45%, #c4b5fd 70%, #a78bfa 85%),
+        radial-gradient(circle at 70% 65%, rgba(255,192,203,0.6), transparent 45%),
+        radial-gradient(circle at 40% 70%, rgba(180,140,255,0.5), transparent 50%);
+      box-shadow:
+        0 0 50px rgba(255,230,240,0.8),
+        0 0 100px rgba(200,150,255,0.6),
+        0 0 150px rgba(180,120,255,0.4),
+        inset 0 0 60px rgba(255,255,255,0.3);
+      animation: moonGlow 4s infinite ease-in-out;
+    }
+
+    @keyframes moonGlow {
+      0%, 100% { 
+        box-shadow: 
+          0 0 50px rgba(255,230,240,0.8),
+          0 0 100px rgba(200,150,255,0.6),
+          0 0 150px rgba(180,120,255,0.4),
+          inset 0 0 60px rgba(255,255,255,0.3);
+      }
+      50% { 
+        box-shadow: 
+          0 0 60px rgba(255,240,250,0.9),
+          0 0 120px rgba(220,170,255,0.7),
+          0 0 180px rgba(95, 6, 179, 0.5),
+          inset 0 0 80px rgba(255,255,255,0.4);
+      }
+    }
+
+    /* Circle Stars (small background) */
+    .star-circle {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .star-circle::before,
+    .star-circle::after {
+      content: '';
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+    }
+    
+    .star-circle::before {
+      width: 100%;
+      height: 30%;
+      top: 35%;
+      left: 0;
+      box-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+    
+    .star-circle::after {
+      width: 30%;
+      height: 100%;
+      left: 35%;
+      top: 0;
+      box-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+
+    /* Star Shape (all visible stars) */
+    .star-shape {
+      position: absolute;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .star-shape::before {
+      content: '★';
+      color: #fffacd;
+      text-shadow: 
+        0 0 15px rgba(255,250,205,1),
+        0 0 30px rgba(255,223,186,1),
+        0 0 45px rgba(255,182,193,0.9),
+        0 0 60px rgba(221,160,221,0.7);
+      display: block;
+    }
+    
+    .star-shape:hover::before {
+      transform: scale(1.4);
+      filter: brightness(1.5);
+    }
+
+    .star-shape.no-message {
+      cursor: default;
+      opacity: 0.7;
+    }
+
+    .star-shape.no-message:hover::before {
+      transform: scale(1);
+      filter: brightness(1);
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+    
+    @keyframes starPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    /* Message Star Animation */
+    .message-star {
+      position: fixed;
+      font-size: 40px;
+      z-index: 200;
+      pointer-events: none;
+    }
+
+    .message-star::before {
+      content: '★';
+      color: #fffacd;
+      text-shadow: 
+        0 0 30px rgba(255,250,205,1),
+        0 0 60px rgba(255,223,186,1),
+        0 0 90px rgba(255,182,193,0.9),
+        0 0 120px rgba(221,160,221,0.8);
+      display: block;
+    }
+
+    @keyframes messageStarRise {
+      0% {
+        transform: translate(0, 0) scale(0) rotate(0deg);
+        opacity: 0;
+      }
+      30% {
+        transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(180deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(1) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    /* Message Trail - now small stars */
+    .star-trail {
+      position: fixed;
+      z-index: 199;
+      pointer-events: none;
+      font-size: 20px;
+    }
+
+    .star-trail::before {
+      content: '★';
+      color: #fffacd;
+      text-shadow: 
+        0 0 20px rgba(255,250,205,1),
+        0 0 40px rgba(255,223,186,1),
+        0 0 60px rgba(255,182,193,0.9),
+        0 0 80px rgba(221,160,221,0.8);
+      display: block;
+    }
+
+    @keyframes trailRise {
+      0% {
+        opacity: 0;
+        transform: translate(var(--tx), 0) scale(0) rotate(0deg);
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(1.2) rotate(360deg);
+      }
+    }
+
+    @keyframes trailFall {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(0.5) rotate(360deg);
+      }
+    }
+
+    /* Message Box - stays visible with transparency */
+    #messageBox {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+      padding: 40px 50px;
+      border-radius: 20px;
+      font-size: 28px;
+      display: none;
+      box-shadow: 
+        0 0 50px rgba(255,255,255,0.3),
+        0 0 100px rgba(180,120,255,0.2);
+      text-align: center;
+      max-width: 85%;
+      border: 2px solid rgba(255,255,255,0.4);
+      z-index: 100;
+      line-height: 1.6;
+    }
+
+    #messageBox.show {
+      display: block;
+      animation: messageAppear 0.8s ease forwards;
+    }
+
+    #messageBox.hide {
+      animation: messageDisappear 0.8s ease forwards;
+    }
+
+    @keyframes messageAppear {
+      0% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+      60% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+      100% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    @keyframes messageDisappear {
+      0% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1);
+      }
+      40% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+      100% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+    }
+
+    #closeBtn {
+      margin-top: 25px;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    #closeBtn:hover {
+      transform: scale(1.05);
+    }
+
+    
+    #hint {
+      position: fixed;
+      bottom: 25px;
+      width: 100%;
+      text-align: center;
+      font-size: 18px;
+      opacity: 0.85;
+      letter-spacing: 1px;
+      animation: hintPulse 3s infinite ease-in-out;
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    
+    #counter {
+      position: fixed;
+      top: 25px;
+      right: 30px;
+      font-size: 20px;
+      background: rgba(0,0,0,0.6);
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.3);
+      z-index: 50;
     }
   </style>
 </head>
+
 <body>
 
-  <h2>🔐 Enter Password</h2>
-  <input type="password" id="password" placeholder="Enter password">
-  <br>
-  <button onclick="checkPassword()">Unlock</button>
+<!-- Lock Screen -->
+<div id="lockScreen">
+  <h2>🔐 Enter Our Secret</h2>
+  <input type="password" id="password" placeholder="Password" onkeypress="if(event.key==='Enter') unlock()">
+  <button onclick="unlock()">Unlock ✨</button>
+</div>
 
-  <div id="wish">
-    🎉 Happy Birthday! Wishing you lots of happiness and success! 🎉
-  </div>
+<!-- Sky -->
+<div id="sky">
+  <div class="milkyway"></div>
+  <div class="moon"></div>
+  <div id="counter">⭐ Messages: <span id="msgCount">0</span>/10</div>
+  <div id="hint">✨ Touch a star to reveal a message ✨</div>
+</div>
 
-  <script>
-    function checkPassword() {
-      const correctPassword = "hi baby";   // 🔑 CHANGE THIS
-      const userPassword = document.getElementById("password").value;
+<!-- Message Box -->
+<div id="messageBox">
+  <div id="messageText"></div>
+  <button id="closeBtn" onclick="closeMessage()">Close ✨</button>
+</div>
 
-      if (userPassword === correctPassword) {
-        document.getElementById("wish").style.display = "block";
+<script>
+  const correctPassword = "tuiektabal"; // 🔑 Change password
+
+  let secretMessages = [
+    "🌟 mara kha ",
+    "🌙 vag",
+    "✨ trt de",
+    "💫 tui ekta faltu",
+    "⭐ kochu gache fashi de.",
+    "🌌 kom jala amake",
+    "🌠 muri kha",
+    "💖 Happy Birthday",
+    "🌸 tui j ajairaaa",
+    "🦋 tut tut tut"
+  ];
+
+  let messagesFound = new Set();
+
+  function unlock() {
+    const input = document.getElementById("password").value;
+    if (input === correctPassword) {
+      document.getElementById("lockScreen").style.display = "none";
+      document.getElementById("sky").style.display = "block";
+      createStars();
+      createDust();
+    } else {
+      alert("Wrong password 😅");
+    }
+  }
+
+  function overlapsWithMoon(x, y, moonCenterX, moonCenterY, moonRadius) {
+    const distance = Math.sqrt(Math.pow(x - moonCenterX, 2) + Math.pow(y - moonCenterY, 2));
+    return distance < moonRadius + 80;
+  }
+
+  function tooCloseToOther(x, y, existingStars, minDistance) {
+    for (let star of existingStars) {
+      const distance = Math.sqrt(Math.pow(x - star.x, 2) + Math.pow(y - star.y, 2));
+      if (distance < minDistance) return true;
+    }
+    return false;
+  }
+
+  function createStars() {
+    const sky = document.getElementById("sky");
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    const moonCenterX = w / 2;
+    const moonCenterY = h * 0.16 + 110;
+    const moonRadius = 110;
+
+    // Create background stars (many small circles)
+    for (let i = 0; i < 300; i++) {
+      const star = document.createElement("div");
+      star.className = "star-circle";
+      
+      const size = 1 + Math.random() * 2;
+      star.style.width = size + "px";
+      star.style.height = size + "px";
+      
+      star.style.left = Math.random() * w + "px";
+      star.style.top = Math.random() * h + "px";
+      
+      star.style.opacity = 0.2 + Math.random() * 0.6;
+      star.style.animation = `twinkle ${2 + Math.random() * 3}s infinite ease-in-out`;
+      star.style.animationDelay = Math.random() * 3 + "s";
+      
+      star.style.pointerEvents = "none";
+      
+      sky.appendChild(star);
+    }
+
+    // Create 35-45 star shapes with better spacing
+    const totalStars = 35 + Math.floor(Math.random() * 11);
+    const messageStarIndices = new Set();
+    
+    while (messageStarIndices.size < 10) {
+      messageStarIndices.add(Math.floor(Math.random() * totalStars));
+    }
+
+    const existingStars = [];
+    const minDistance = 60; // Minimum distance between stars
+    
+    for (let i = 0; i < totalStars; i++) {
+      const star = document.createElement("div");
+      star.className = "star-shape";
+
+      let x, y, attempts = 0;
+      
+      do {
+        x = Math.random() * w;
+        y = Math.random() * h;
+        attempts++;
+      } while ((overlapsWithMoon(x, y, moonCenterX, moonCenterY, moonRadius) || 
+                tooCloseToOther(x, y, existingStars, minDistance)) && attempts < 100);
+
+      existingStars.push({x, y});
+
+      star.style.left = x + "px";
+      star.style.top = y + "px";
+      
+      // More proportional sizes: small (16-20), medium (21-26)
+      let size;
+      const rand = Math.random();
+      if (rand < 0.6) size = 16 + Math.random() * 5; // 60% small
+      else size = 21 + Math.random() * 6; // 40% medium
+      
+      star.style.fontSize = size + "px";
+      
+      star.style.animation = `starPulse ${2 + Math.random() * 2}s infinite ease-in-out`;
+      star.style.animationDelay = Math.random() * 2 + "s";
+
+      if (messageStarIndices.has(i)) {
+        const messageIndex = Array.from(messageStarIndices).indexOf(i);
+        star.dataset.messageIndex = messageIndex;
+        star.onclick = () => revealMessage(star, messageIndex, x, y);
       } else {
-        alert("Wrong password 😅");
+        star.classList.add("no-message");
+      }
+
+      sky.appendChild(star);
+    }
+  }
+
+  function revealMessage(star, index, startX, startY) {
+    const msg = secretMessages[index];
+    
+    // Calculate target position (top center of screen)
+    const targetX = window.innerWidth / 2;
+    const targetY = window.innerHeight * 0.3;
+    
+    // Calculate movement deltas
+    const deltaX = targetX - startX;
+    const deltaY = targetY - startY;
+    
+    // Create animated star that rises
+    const messageStar = document.createElement("div");
+    messageStar.className = "message-star";
+    messageStar.style.left = startX + "px";
+    messageStar.style.top = startY + "px";
+    messageStar.style.setProperty('--tx', deltaX + 'px');
+    messageStar.style.setProperty('--ty', deltaY + 'px');
+    messageStar.style.animation = 'messageStarRise 1.2s ease-out forwards';
+    document.body.appendChild(messageStar);
+
+    // Create scattered star mist effect
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        const trail = document.createElement("div");
+        trail.className = "star-trail";
+        
+        // Random sizes
+        const size = 8 + Math.random() * 18;
+        trail.style.fontSize = size + "px";
+        
+        // Scatter horizontally and move toward target
+        const scatterX = (Math.random() - 0.5) * 150;
+        const scatterY = (Math.random() - 0.5) * 50;
+        const trailDeltaX = deltaX + scatterX;
+        const trailDeltaY = deltaY + scatterY;
+        
+        trail.style.left = startX + "px";
+        trail.style.top = (startY + i * 8) + "px";
+        
+        trail.style.setProperty('--tx', trailDeltaX + 'px');
+        trail.style.setProperty('--ty', trailDeltaY + 'px');
+        
+        // Random animation duration
+        const duration = 1.2 + Math.random() * 0.6;
+        trail.style.animation = `trailRise ${duration}s ease-out forwards`;
+        
+        document.body.appendChild(trail);
+        
+        setTimeout(() => trail.remove(), duration * 1000);
+      }, i * 60);
+    }
+
+    // Show message after animation
+    setTimeout(() => {
+      document.getElementById("messageText").innerText = msg;
+      const box = document.getElementById("messageBox");
+      box.style.display = "block";
+      box.classList.add("show");
+      box.classList.remove("hide");
+      messageStar.remove();
+    }, 1200);
+
+    if (!messagesFound.has(index)) {
+      messagesFound.add(index);
+      document.getElementById("msgCount").innerText = messagesFound.size;
+
+      if (messagesFound.size === 10) {
+        document.getElementById("hint").innerText = "✨ All messages revealed! You found them all! 💕";
       }
     }
-  </script>
+  }
+
+  function closeMessage() {
+    const box = document.getElementById("messageBox");
+    box.classList.add("hide");
+    box.classList.remove("show");
+    
+    // Get message box position
+    const rect = box.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Create flying stars when closing
+    for (let i = 0; i < 15; i++) {
+      setTimeout(() => {
+        const trail = document.createElement("div");
+        trail.className = "star-trail";
+        
+        // Random sizes
+        const size = 10 + Math.random() * 20;
+        trail.style.fontSize = size + "px";
+        
+        // Scatter from center
+        const scatterX = (Math.random() - 0.5) * 200;
+        const startX = centerX + scatterX;
+        trail.style.left = startX + "px";
+        trail.style.top = centerY + "px";
+        
+        // Fly out in different directions - UPWARD
+        const flyX = (Math.random() - 0.5) * 500;
+        const flyY = -(300 + Math.random() * 400); // Negative to go upward
+        
+        trail.style.setProperty('--tx', flyX + 'px');
+        trail.style.setProperty('--ty', flyY + 'px');
+        
+        const duration = 1.5 + Math.random() * 0.8;
+        trail.style.animation = `trailFall ${duration}s ease-in forwards`;
+        
+        document.body.appendChild(trail);
+        
+        setTimeout(() => trail.remove(), duration * 1000);
+      }, i * 50);
+    }
+    
+    setTimeout(() => {
+      box.style.display = "none";
+    }, 800);
+  }
+
+  function createDust() {
+    const sky = document.getElementById("sky");
+
+    for (let i = 0; i < 140; i++) {
+      const d = document.createElement("div");
+      d.className = "dust";
+      d.style.left = Math.random() * 100 + "vw";
+      d.style.top = Math.random() * 120 + "vh";
+      d.style.animationDuration = (18 + Math.random() * 30) + "s";
+      d.style.opacity = Math.random();
+      sky.appendChild(d);
+    }
+  }
+</script>
 
 </body>
 </html>
