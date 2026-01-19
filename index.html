@@ -406,7 +406,7 @@
 
 <!-- Lock Screen -->
 <div id="lockScreen">
-  <h2>🔐 Enter Our Secret</h2>
+  <h2>🔐 Who am i to you?</h2>
   <input type="password" id="password" placeholder="Password" onkeypress="if(event.key==='Enter') unlock()">
   <button onclick="unlock()">Unlock ✨</button>
 </div>
@@ -415,8 +415,8 @@
 <div id="sky">
   <div class="milkyway"></div>
   <div class="moon"></div>
-  <div id="counter">⭐ Messages: <span id="msgCount">0</span>/10</div>
-  <div id="hint">✨ Touch a star to reveal a message ✨</div>
+  <div id="counter"> 😋 Khuje Paisen : <span id="msgCount">0</span>/10</div>
+  <div id="hint">✨ A little star, but holds a deep feeling, touch to find out what my heart has been whispering  ✨</div>
 </div>
 
 <!-- Message Box -->
@@ -426,20 +426,22 @@
 </div>
 
 <script>
-  const correctPassword = "tuiektabal"; // 🔑 Change password
+  const correctPassword = "everything"; // 🔑 Change password
 
   let secretMessages = [
-    "🌟 mara kha ",
-    "🌙 vag",
-    "✨ trt de",
-    "💫 tui ekta faltu",
-    "⭐ kochu gache fashi de.",
-    "🌌 kom jala amake",
-    "🌠 muri kha",
-    "💖 Happy Birthday",
-    "🌸 tui j ajairaaa",
-    "🦋 tut tut tut"
+    "At my lowest point, life gave me you like my quiet miracle 🌌",
+    "You make me happier than you probably realize 🌼",
+    "With you, even silence feels like melody, and every moment with you feels meant to be ♥️",
+    "With you, even the smallest moments make my heart race, goosebumps rise, butterflies take over, like it knows something magical is happening ✨",
+    "Every word from you sends shivers that I can't explain, my heart skipping beats, like it already knew happiness would find me in you 🫶",
+    "I have that feminine urge like I want to be your most favourite person in this whole world 💫",
+    "Even a meteor shower can't outshine the way I light up when I'm with you Priom 🧡",
+    "Apni amar, r ekla amar, r puratai amar 😋",
+    "Babe, babe, tomake amar jeeee valo lage, tumi onek valo Babe. Tumi amar onek kacher 🤍",
+    "Tui Amar 🌍🦋💫"
   ];
+
+
 
   let messagesFound = new Set();
 
@@ -451,7 +453,7 @@
       createStars();
       createDust();
     } else {
-      alert("Wrong password 😅");
+      alert("Bddp, Abr try koro ");
     }
   }
 
@@ -498,7 +500,7 @@
       sky.appendChild(star);
     }
 
-    // Create 35-45 star shapes with better spacing
+    
     const totalStars = 35 + Math.floor(Math.random() * 11);
     const messageStarIndices = new Set();
     
@@ -507,7 +509,7 @@
     }
 
     const existingStars = [];
-    const minDistance = 60; // Minimum distance between stars
+    const minDistance = 60; 
     
     for (let i = 0; i < totalStars; i++) {
       const star = document.createElement("div");
